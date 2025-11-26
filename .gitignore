@@ -1,0 +1,5 @@
+# Dependencies - Thư viện tải về, không cần đưa lên git
+node_modules/
+
+# Environment variables - File chứa mật khẩu/key bảo mật
+.env
