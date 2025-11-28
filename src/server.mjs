@@ -1,17 +1,13 @@
 import express from "express";
+import cookieParser from "cookie-parser";
+import indexRouter from "./routes/index.mjs";
 
-import usersRouter from "./routes/users.mjs";
-import productsRouter from "./routes/products.mjs";
 const app = express();
 app.use(express.json());
-app.use(usersRouter); // sử dụng router users riêng.
-app.use(productsRouter); // sử dụng router products riêng.
+app.use(cookieParser("helloworld"));
+app.use(indexRouter); // tất cả router trong index Router
 
 const PORT = process.env.PORT || 8080;
-//localhost:8080
-app.get("/", (req, res) => {
-  res.status(201).send({ msg: "Hello" });
-});
 
 app.listen(PORT, () => {
   console.log(`Running on Port ${PORT}`);
