@@ -1,7 +1,17 @@
 export const mockUsers = [
-  { id: 1, username: "hung_manh", displayName: "Hùng Mạnh" },
-  { id: 2, username: "manh", displayName: "Hùng Mạnh 01" },
-  { id: 3, username: "do", displayName: "Hùng Mạnh 02" },
+  {
+    id: 1,
+    username: "hungmanh",
+    password: "hello123",
+    displayName: "Hùng Mạnh",
+  },
+  {
+    id: 2,
+    username: "manh",
+    password: "123456789",
+    displayName: "Hùng Mạnh 01",
+  },
+  { id: 3, username: "do", password: "123456789", displayName: "Hùng Mạnh 02" },
 ];
 export const mockProducts = [
   { id: 123, name: "Product name 01", price: 30000 },
