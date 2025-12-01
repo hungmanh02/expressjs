@@ -9,6 +9,8 @@ import {
 import { mockUsers } from "../utils/constants.mjs";
 import { createUserValidationSchema } from "../utils/validationSchemas.mjs";
 import { resolveIndexByUserId } from "../middleware/middlewares.mjs";
+import { User } from "../mongoose/schemas/user.mjs";
+import { hashPassword } from "../utils/helpers.mjs";
 const router = Router();
 
 // query params
@@ -49,18 +51,24 @@ router.get("/api/users/:id", resolveIndexByUserId, (req, res) => {
 router.post(
   "/api/users",
   checkSchema(createUserValidationSchema),
-  (req, res) => {
+  async (req, res) => {
     const result = validationResult(req);
-    // console.log(result);
+    if (!result.isEmpty()) return res.status(400).send(result.array());
 
-    if (!result.isEmpty())
-      return res.status(400).send({ errors: result.array() });
-    const data = matchedData(req); // lấy tất cả cái trường trong body khi được gửi từ request lên. sử dụng express validator
-    const newUser = { id: mockUsers[mockUsers.length - 1].id + 1, ...data }; // ...body lầy copy toàn bộ dữ liệu request gửi lên body.
-    mockUsers.push(newUser);
-    return res
-      .status(201)
-      .send({ data: newUser, msg: "Thêm mới thành công một tài khoản" });
+    // sử dụng database mogodb.
+    const data = matchedData(req);
+    data.password = hashPassword(data.password);
+    // console.log(data);
+    const newUser = new User(data);
+    try {
+      const saveUser = await newUser.save();
+      return res
+        .status(201)
+        .send({ data: saveUser, msg: "Đăng ký tài khoản thành công" });
+    } catch (error) {
+      console.log(error);
+      return res.sendStatus(400);
+    }
   }
 );
 router.put("/api/users/:id", resolveIndexByUserId, (req, res) => {

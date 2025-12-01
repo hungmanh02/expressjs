@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  db-mysql:
+    image: mysql:5.7.40
+    restart: always
+    environment:
+      - MYSQL_DATABASE=hocbackend
+      - MYSQL_ROOT_PASSWORD=123456
+    ports:
+      - "3307:3306"
+
+  db-mongo:
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27017" # Map cổng 27017 của máy thật vào container
+    volumes:
+      - mongo-data:/data/db # Lưu trữ dữ liệu ra ngoài container
+
+volumes:
+  mongo-data:
