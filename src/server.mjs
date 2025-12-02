@@ -6,6 +6,7 @@ import { mockUsers } from "./utils/constants.mjs";
 import mongoose from "mongoose";
 import passport from "passport";
 import "./strategies/local-strategy.mjs";
+import MongoStore from "connect-mongo";
 const app = express();
 mongoose
   .connect("mongodb://localhost:27017/expressjs")
@@ -23,6 +24,9 @@ app.use(
     cookie: {
       maxAge: 60000 * 60 * 2,
     },
+    store: MongoStore.create({
+      client: mongoose.connection.getClient(),
+    }),
   })
 );
 app.use(indexRouter); // tất cả router trong index Router
@@ -37,6 +41,7 @@ app.get("/api/auth/status", (req, res) => {
   console.log(`Inside /auth/status endpoint`);
   console.log(req.user);
   console.log(req.session);
+  console.log(req.sessionID);
   return req.user ? res.send(req.user) : res.sendStatus(401);
 });
 // logout = passport.
